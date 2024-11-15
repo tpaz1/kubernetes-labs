@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: color-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: color-app
+  template:
+    metadata:
+      labels:
+        app: color-app
+    spec:
+      containers:
+      - name: color-app
+        image: tpaz1/devopscourse:latest
+        ports:
+        - containerPort: 8080  # Default port for this app
+        env:
+        - name: UI_COLOR
+          valueFrom:
+            configMapKeyRef:
+              name: color-config
+              key: UI_COLOR
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: color-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: color-app
