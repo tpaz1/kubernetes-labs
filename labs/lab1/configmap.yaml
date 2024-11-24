@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: color-config
 data:
-  UI_COLOR: "green"  # Default color
+  UI_COLOR: "lightblue"  # Default color

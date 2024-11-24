@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: color-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: color-app
@@ -23,13 +23,20 @@ spec:
             configMapKeyRef:
               name: color-config
               key: UI_COLOR
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: color-app
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 80
       targetPort: 8080
