@@ -1,13 +1,29 @@
 
 # Kubernetes Labs Collection
 
-Welcome to the `Kubernetes` Labs folder! This collection contains 8 different hands-on labs designed to enhance your understanding of `Kubernetes`. Each lab focuses on a specific concept or feature of ``Kubernetes``, offering practical scenarios for learning and experimentation.
+Welcome to the `Kubernetes` Labs folder! This collection contains 8 different hands-on labs designed to enhance your understanding of `Kubernetes`. Each lab focuses on a specific concept or feature of `Kubernetes`, offering practical scenarios for learning and experimentation.
+
+---
+
+## **Prerequisites**
+To get started with these labs, ensure the following prerequisites are met:
+
+- A running Kubernetes cluster (e.g., Minikube, Kind, or a managed cluster).
+- `kubectl` installed and configured.
+- Basic understanding of Kubernetes concepts.
+
+### **Setting Up Minikube**
+For those using Minikube, you can start your cluster with the following command:
+
+```bash
+minikube start --driver=docker --cni=cilium --kubernetes-version=stable --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=AlwaysAllow --extra-config=kubelet.cgroup-driver=systemd --extra-config=kubelet.read-only-port=10255 --insecure-registry="registry.k8s.io"
+```
 
 ---
 
 ## **Labs Overview**
 
-### 1. **Using ConfigMap to Change Application **
+### 1. **Using ConfigMap to Change Application**
    - **Objective**: Learn how to use a **ConfigMap** in `Kubernetes` to manage configuration data for your application.
    - **Key Topics**: `ConfigMap`, `Deployment`
    - **Folder**: `lab1-ConfigMap`
@@ -25,7 +41,7 @@ Welcome to the `Kubernetes` Labs folder! This collection contains 8 different ha
 
 ### 3. **Understanding Persistence with StatefulSets, and Persistent Volumes**
    - **Objective**: Learn about `Kubernetes` persistence by deploying a PostgreSQL database using both **Deployments** and **StatefulSets**.
-   - **Key Topics**: `PVC`, `PV`, `StorageClass`, `Statefilset`.
+   - **Key Topics**: `PVC`, `PV`, `StorageClass`, `Statefulset`.
    - **Folder**: `lab3-persistence`
    - [Detailed Instructions](./lab3-persistence/README.md)
 
@@ -63,9 +79,9 @@ Welcome to the `Kubernetes` Labs folder! This collection contains 8 different ha
 
 ---
 
-### 8. **lab8-scheduling**
+### 8. **Scheduling**
    - **Objective**: This lab demonstrates how Kubernetes uses `taints`, `tolerations`, `node affinity`, and `pod anti-affinity` to control pod scheduling.
-   - **Key Topics**: `taints`, `tolerations`, `node affinity`, and `pod anti-affinity`.
+   - **Key Topics**: `Taints`, `Tolerations`, `Node Affinity`, `Pod Anti-affinity`.
    - **Folder**: `lab8-scheduling`
    - [Detailed Instructions](./lab8-scheduling/README.md)
 
@@ -75,13 +91,6 @@ Welcome to the `Kubernetes` Labs folder! This collection contains 8 different ha
 1. Navigate to the folder of the lab you wish to explore.
 2. Follow the instructions in the `README.md` file of the respective lab.
 3. Experiment with the concepts and extend the labs as needed!
-
----
-
-## **Prerequisites**
-- A running Kubernetes cluster (e.g., Minikube, Kind, or a managed cluster).
-- `kubectl` installed and configured.
-- Basic understanding of Kubernetes concepts.
 
 ---
 
