@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: color-config
-data:
-  UI_COLOR: "lightblue"  # Default color

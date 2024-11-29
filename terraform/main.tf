@@ -35,36 +35,25 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
-# Ansible Controller
-resource "aws_instance" "ansible_controller" {
-  ami               = "ami-0583d8c7a9c35822c"  # rhel 9 AMI for us-east-1
+# k8s Controller
+resource "aws_instance" "k8s_controller" {
+  ami               = "ami-005fc0f236362e99f"  # rhel 9 AMI for us-east-1
   instance_type     = "t2.medium"
   key_name          = "vockey"
   security_groups   = [aws_security_group.allow_ssh.name]
-
-  user_data = <<-EOF
-            #!/bin/bash
-            sudo dnf install ansible-core -y || { echo 'Ansible installation failed' > /tmp/ansible_install_error.log; exit 1; }
-            sudo dnf install -y git || { echo 'Git installation failed' > /tmp/git_install_error.log; exit 1; }
-            # Clone the public repository
-            git clone https://github.com/tpaz1/ansible-labs.git /home/ec2-user/ansible-labs || { echo 'Git clone failed' > /tmp/git_clone_error.log; exit 1; }
-            sudo chown -R ec2-user:ec2-user /home/ec2-user/ansible-labs
-            EOF
-
   tags = {
-    Name = "ansible-controller"
+    Name = "k8s-controller"
   }
 }
 
-# # Ansible Workers
-# resource "aws_instance" "ansible_workers" {
-#   count             = 2
-#   ami               = "ami-0583d8c7a9c35822c"  # CentOS 7 AMI for us-east-1
-#   instance_type     = "t2.small"
-#   key_name          = "vockey"
-#   security_groups   = [aws_security_group.allow_ssh.name]
-
-#   tags = {
-#     Name = "ansible-worker-${count.index + 1}"
-#   }
-# }
+ # k8s Workers
+resource "aws_instance" "k8s_workers" {
+  count             = 2
+  ami               = "ami-005fc0f236362e99f"  # CentOS 7 AMI for us-east-1
+  instance_type     = "t2.medium"
+  key_name          = "vockey"
+  security_groups   = [aws_security_group.allow_ssh.name]
+  tags = {
+    Name = "k8s-worker-${count.index + 1}"
+  }
+}
