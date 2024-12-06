@@ -10,6 +10,97 @@ This is an advanced lab, so you should be familiar with Kubernetes networking an
 
 - A Kubernetes cluster (Minikube, AWS EKS, or any cluster running Kubernetes)
 - `kubectl` installed and configured to interact with your cluster
+- `metrics-server` installed on the cluster
+
+# Kubernetes Metrics Server Installation and Patching Guide
+
+## **Step 1: Install the Metrics Server**
+
+1. Apply the Metrics Server YAML:
+   Use the official Metrics Server deployment file from GitHub:
+   ```bash
+   kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+   ```
+
+2. Verify that the Metrics Server is deployed:
+   ```bash
+   kubectl -n kube-system get pods -l k8s-app=metrics-server
+   ```
+
+   You should see the Metrics Server pod in the **Running** state.
+
+---
+
+## **Step 2: Patch the Metrics Server Deployment**
+
+Patch the Metrics Server deployment to configure it properly:
+
+1. Run the following command:
+   ```bash
+   kubectl -n kube-system patch deployment metrics-server --type='json' -p='[{
+     "op": "add", 
+     "path": "/spec/template/spec/containers/0/args", 
+     "value": [
+       "--kubelet-insecure-tls",
+       "--cert-dir=/tmp",
+       "--secure-port=10250",
+       "--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname",
+       "--kubelet-use-node-status-port",
+       "--metric-resolution=15s"
+     ]
+   }]'
+   ```
+
+---
+
+## **Step 3: Restart the Metrics Server Deployment**
+
+Restart the Metrics Server deployment to apply the patch:
+```bash
+kubectl -n kube-system rollout restart deployment metrics-server
+```
+
+---
+
+## **Step 4: Verify the Metrics Server**
+
+1. **Check Logs**:
+   Ensure the Metrics Server pod is running without issues:
+   ```bash
+   kubectl -n kube-system logs -l k8s-app=metrics-server
+   ```
+
+2. **Test Metrics Availability**:
+   Use the following commands to verify the Metrics API:
+   ```bash
+   kubectl top nodes
+   kubectl top pods
+   ```
+
+   If these commands return metrics, the Metrics Server is working correctly.
+
+---
+
+## **Explanation of Patching Arguments**
+
+- **`--kubelet-insecure-tls`**: Disables TLS verification for connections to the kubelet.
+- **`--cert-dir=/tmp`**: Specifies a temporary directory for certificates.
+- **`--secure-port=10250`**: Configures the Metrics Server to use the kubelet's secure port.
+- **`--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname`**: Prioritizes the order of node address types for connections.
+- **`--kubelet-use-node-status-port`**: Ensures the Metrics Server uses the correct port from the node status.
+- **`--metric-resolution=15s`**: Sets the resolution interval for metrics scraping.
+
+---
+
+## **Summary**
+- Installed the Metrics Server using the official YAML.
+- Patched the deployment to fix connectivity issues in custom environments.
+- Verified the Metrics Server by testing node and pod metrics.
+
+This setup ensures the Metrics Server works seamlessly in various Kubernetes environments.
+
+---
+
 ## Lab Steps
 
 ### Step 1: Setup a Simple Multi-Tier Application
