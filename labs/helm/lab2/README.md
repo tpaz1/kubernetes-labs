@@ -40,24 +40,30 @@ This lab will guide you through customizing an existing Helm chart for Prometheu
 ## **Step 2: Enable Persistence**
 
 1. Edit the `values.yaml` file to enable persistence for Grafana and Prometheus:
-   ```yaml
-   grafana:
+    <details>
+    <summary>Click to view command</summary>
+
+    ```yaml
+    grafana:
      persistence:
        enabled: true
        size: 10Gi
      adminPassword: "admin123"
-
-   prometheus:
-     server:
-       persistentVolume:
-         enabled: true
-         size: 20Gi
-   ```
-
+    prometheus:
+      prometheusSpec:
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 20Gi
+    ```
+    </details>
 2. Upgrade the Helm release to apply changes:
-   ```bash
-   helm upgrade monitoring prometheus-community/kube-prometheus-stack -f values.yaml
-   ```
+    ```bash
+    helm upgrade monitoring prometheus-community/kube-prometheus-stack -f values.yaml -n monitoring
+    ```
 
 3. Verify that persistence is enabled:
    - Check the PersistentVolumeClaims (PVCs):

@@ -17,18 +17,51 @@ Convert the Deployment and Service YAML files into a Helm chart with templates.
 
 1. **Create a Helm Chart**
    - Create a Helm chart named `webapp-nginx` in the directory using the following command:
-     ```bash
-     helm create webapp-nginx
-     ```
+    <details>
+    <summary>Click to view command</summary>
+
+    ```bash
+    helm install webapp-nginx
+    ```
+    </details>
+
    - This will generate the necessary chart directory structure.
 
 2. **Move Definition Files**
-   - Copy the Deployment and Service YAML files from the provided repository into the `templates` directory of your chart:
-     ```
-     webapp-nginx/templates/
-     ```
+   - Remove the created files under `templates` directory
+    <details>
+    <summary>Click to view command</summary>
+    
+    ```bash
+    rm -rf webapp-nginx/templates/*
+    ```
+    </details>
 
-3. **Template Resource Names**
+   - Copy the Deployment and Service YAML files from the provided repository into the `templates` directory of your chart:
+
+3. **Install without templating**
+   - Install your chart as it is without any templating
+    <details>
+    <summary>Click to view command</summary>
+    
+    ```bash
+    helm install webapp-release webapp-nginx
+    ```
+    </details>
+   - Verify that your deployment is up and running
+  ```bash
+  kubectl get pods
+  ```
+   - port forward and access your application in the browser
+  ```bash
+  kubectl port-forward service/nginx 8080:80
+  ```
+   - delete the chart and continue on:
+  ```bash
+  helm uninstall webapp-release
+  ```
+
+4. **Template Resource Names**
    - Modify the Deployment and Service definitions to use templated names. Replace hardcoded names with the following format:
      ```
      {{ .Release.Name }}-nginx
@@ -68,14 +101,10 @@ Convert the Deployment and Service YAML files into a Helm chart with templates.
     ```
    </details>
 
-
-7. **Clean Up Unused Files**
-   - Remove any unused YAML or text files from the `templates` directory to keep your chart clean and concise.
-
 ## Validation
 - Install the chart in a Kubernetes cluster to verify functionality:
   ```bash
-  helm install my-release /root/webapp-nginx
+  helm install my-release webapp-nginx
   ```
 
 ---
