@@ -46,14 +46,14 @@ resource "aws_instance" "k8s_controller" {
   }
 }
 
- # k8s Workers
-resource "aws_instance" "k8s_workers" {
-  count             = 2
-  ami               = "ami-005fc0f236362e99f"  # CentOS 7 AMI for us-east-1
-  instance_type     = "t2.medium"
-  key_name          = "vockey"
-  security_groups   = [aws_security_group.allow_ssh.name]
-  tags = {
-    Name = "k8s-worker-${count.index + 1}"
-  }
-}
+#  # k8s Workers
+# resource "aws_instance" "k8s_workers" {
+#   count             = 2
+#   ami               = "ami-005fc0f236362e99f"  # CentOS 7 AMI for us-east-1
+#   instance_type     = "t2.medium"
+#   key_name          = "vockey"
+#   security_groups   = [aws_security_group.allow_ssh.name]
+#   tags = {
+#     Name = "k8s-worker-${count.index + 1}"
+#   }
+# }

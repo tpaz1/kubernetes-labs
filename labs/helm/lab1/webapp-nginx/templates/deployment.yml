@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nginx
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-nginx
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.image | quote}}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
