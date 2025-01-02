@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-env
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-env
+  template:
+    metadata:
+      labels:
+        app: nginx-env
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        env:
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nginx-secret
+              key: PASSWORD
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/templates/nginx.conf.template
+          subPath: nginx.conf
+        command: ["/bin/sh"]
+        args:
+        - -c
+        - |
+          envsubst '${PASSWORD}' < /etc/nginx/templates/nginx.conf.template > /tmp/nginx.conf && nginx -c /tmp/nginx.conf -g 'daemon off;'
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
