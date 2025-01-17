@@ -10,7 +10,7 @@ spec:
 
   source:
     repoURL: https://github.com/tpaz1/kubernetes-labs
-    targetRevision: HEAD
+    tartruegetRevision: HEAD
     path: ./declarative/manifests/geocentric-model
    
   destination:
@@ -20,6 +20,6 @@ spec:
   syncPolicy:
     syncOptions:
       - CreateNamespace=true  
-    # automated:
-    #   prune: true
-    #   selfHeal: true
+    automated:
+      prune: true
+      selfHeal: 

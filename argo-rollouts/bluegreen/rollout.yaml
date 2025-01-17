@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: bluegreen-demo
+  namespace: default
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  strategy:
+    blueGreen:
+      activeService: solar-service
+      previewService: preview-service
+      autoPromotionEnabled: false
+  selector:
+    matchLabels:
+      app: bluegreen-demo
+  template:
+    metadata:
+      labels:
+        app: bluegreen-demo
+    spec:
+      containers:
+      - name: bluegreen-demo
+        image: siddharth67/solar-system:v3
+        ports:
+        - containerPort: 80

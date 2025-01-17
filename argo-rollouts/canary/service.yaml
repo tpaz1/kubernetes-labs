@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: solar-service
+spec:
+  selector:
+    app: solar-system
+  ports:
+  - name: solar-port
+    port: 80
+    targetPort: 80
